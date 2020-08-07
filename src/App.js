@@ -12,6 +12,17 @@ class App extends React.Component{
     }
     this.pushFrames = this.pushFrames.bind(this);
   }
+  changeModel = () =>{
+    console.log("Trying to change model...")
+    // changing to 
+    fetch('/changeModel')
+    .then(res=>res.json())
+    .then(result =>{
+      console.log("Returned post with status "+ result.status);
+      console.log("Message: "+ result.message);
+    })
+    return
+  }
   changeColor = ()=>{
     console.log("pressed!")
     // changing to 
@@ -178,8 +189,8 @@ class App extends React.Component{
           {/* <button onClick={()=>this.pushFrames("videos/test_daily.mp4")}>
             Push frames
           </button> */}
-          <button onClick={this.changeColor}>
-            Change Color
+          <button onClick={this.changeModel}>
+            Change Model
           </button>
           <button onClick={()=>this.getImage2()}>
             Wanna see yourself?
