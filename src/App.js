@@ -11,11 +11,27 @@ class App extends React.Component{
       color: true,
     }
     this.pushFrames = this.pushFrames.bind(this);
+    this.backend_ip = "http://18.27.79.47:5000";
   }
   changeModel = () =>{
     console.log("Trying to change model...")
     // changing to 
-    fetch('/changeModel')
+    let params = {
+      // method: 'GET',
+      // origin: "http://10.29.194.239", //TODO: Change this!
+      // mode: 'cors', // no-cors, *cors, same-origin
+      // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+      // credentials: 'same-origin', // include, *same-origin, omit
+      // headers: {
+      //   'Content-Type': 'application/json',
+      //   // 'Content-Type': 'application/x-www-form-urlencoded',
+      //   'Access-Control-Allow-Origin': "*",
+
+      // },
+      // redirect: 'follow', // manual, *follow, error
+      // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    }
+    fetch(`${this.backend_ip}/changeModel`)//, params)
     .then(res=>res.json())
     .then(result =>{
       console.log("Returned post with status "+ result.status);
@@ -26,6 +42,7 @@ class App extends React.Component{
   changeColor = ()=>{
     console.log("pressed!")
     // changing to 
+    // let pa
     fetch('/changeColor')
     .then(res=>res.json())
     .then(result =>{
@@ -126,9 +143,15 @@ class App extends React.Component{
   }
   getImage2 = ()=>{
     let that = this;
+    let params = {
+      // method: 'GET  ',
+      mode: 'no-cors', // no-cors, *cors, same-origin
+
+    }
     console.log("getting image...")
-    fetch("/image")
-    .then(res => res.body.getReader())
+    fetch(`${this.backend_ip}/image`)//, params)
+    .then(res => res.body)
+    .then(body => body.getReader())
     .then(async function(reader){ 
       let runs = 0;
       let full = "";
