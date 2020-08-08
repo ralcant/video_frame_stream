@@ -15,22 +15,6 @@ class App extends React.Component{
   }
   changeModel = () =>{
     console.log("Trying to change model...")
-    // changing to 
-    let params = {
-      // method: 'GET',
-      // origin: "http://10.29.194.239", //TODO: Change this!
-      // mode: 'cors', // no-cors, *cors, same-origin
-      // cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      // credentials: 'same-origin', // include, *same-origin, omit
-      // headers: {
-      //   'Content-Type': 'application/json',
-      //   // 'Content-Type': 'application/x-www-form-urlencoded',
-      //   'Access-Control-Allow-Origin': "*",
-
-      // },
-      // redirect: 'follow', // manual, *follow, error
-      // referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    }
     fetch(`${this.backend_ip}/changeModel`)//, params)
     .then(res=>res.json())
     .then(result =>{
@@ -40,9 +24,6 @@ class App extends React.Component{
     return
   }
   changeColor = ()=>{
-    console.log("pressed!")
-    // changing to 
-    // let pa
     fetch('/changeColor')
     .then(res=>res.json())
     .then(result =>{
@@ -53,101 +34,9 @@ class App extends React.Component{
       color: !this.state.color,
     })
     return
-    let body = JSON.stringify(this.state);
-    let params = {
-      method: "POST",
-      mode: 'cors', // no-cors, *cors, same-origin
-      cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: 'same-origin', // include, *same-origin, omit
-      headers: {
-        'Content-Type': 'application/json'
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      redirect: 'follow', // manual, *follow, error
-      referrerPolicy: 'no-referrer', // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: body,
-    }
-    fetch('/test', params)
-    .then(res => res.body.getReader())
-    .then(reader =>{
-      while (true){
-        const {done, value} = reader.read();
-        if (done){
-          break;
-        }
-        this.setState({
-          num: value.result
-        })
-      }
-    })
-    // .then(data =>{
-    //   console.log(data)
-    //   this.setState({
-    //       num: data.result
-    //   })
-    // })
-  }
-  async pushFrames(videoUrl, fps=25){
-      return new Promise(async (resolve) => {
-    
-        // fully download it first (no buffering):
-        let videoBlob = await fetch(videoUrl).then(r => r.blob());
-        let videoObjectUrl = URL.createObjectURL(videoBlob);
-        let video = document.createElement("video");
-    
-        let seekResolve;
-        video.addEventListener('seeked', async function() {
-          if(seekResolve) seekResolve();
-        });
-    
-        video.src = videoObjectUrl;
-    
-        // workaround chromium metadata bug (https://stackoverflow.com/q/38062864/993683)
-        while((video.duration === Infinity || isNaN(video.duration)) && video.readyState < 2) {
-          await new Promise(r => setTimeout(r, 1000));
-          video.currentTime = 10000000*Math.random();
-        }
-        let duration = video.duration;
-    
-        let canvas = document.createElement('canvas');
-        let context = canvas.getContext('2d');
-        let [w, h] = [video.videoWidth, video.videoHeight]
-        canvas.width =  w;
-        canvas.height = h;
-    
-        let frames = [];
-        let interval = 1 / fps;
-        let currentTime = 0;
-    
-        while(currentTime < duration) {
-          video.currentTime = currentTime;
-          await new Promise(r => seekResolve=r);
-    
-          context.drawImage(video, 0, 0, w, h);
-          let base64ImageData = canvas.toDataURL();
-          frames.push(base64ImageData);
-    
-          currentTime += interval;
-        }
-        resolve(frames);
-      });
-  }
-  getImage = ()=>{
-    console.log("getting image...")
-    fetch("/image")
-    .then(res => res.json())
-    .then(result => {
-        console.log(result)
-        this.setFrame(result.frame)
-    })
   }
   getImage2 = ()=>{
     let that = this;
-    let params = {
-      // method: 'GET  ',
-      mode: 'no-cors', // no-cors, *cors, same-origin
-
-    }
     console.log("getting image...")
     fetch(`${this.backend_ip}/image`)//, params)
     .then(res => res.body)
@@ -190,7 +79,7 @@ class App extends React.Component{
     return base64regex.test(str);
     if (str ==='' || str.trim() ===''){ return false; }
     try {
-        return btoa(atob(str)) == str;
+        return btoa(atob(str)) ===  str;
     } catch (err) {
         return false;
     }
@@ -200,11 +89,6 @@ class App extends React.Component{
       image_source: frame,
     })
   }
-  // getStream =()=>{
-  //   this.timer = setInterval(()=>{
-  //     this.getImage();
-  //   }, 1000)
-  // }
   render(){
     return (
       <div className="App">
