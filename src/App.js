@@ -10,7 +10,7 @@ class App extends React.Component{
       image_source: "",
       color: true,
     }
-    this.pushFrames = this.pushFrames.bind(this);
+    // this.pushFrames = this.pushFrames.bind(this);
     this.backend_ip = "http://18.27.79.47:5000";
   }
   changeModel = () =>{
