@@ -11,11 +11,15 @@ class App extends React.Component{
       color: true,
     }
     // this.pushFrames = this.pushFrames.bind(this);
-    this.backend_ip = "https://18.27.79.47:5000";
+    this.backend_ip = "http://18.27.79.47:5000";
   }
   changeModel = () =>{
+    let requestOptions = {
+      method: 'GET',
+      redirect: 'follow'
+    };
     console.log("Trying to change model...")
-    fetch(`${this.backend_ip}/changeModel`)//, params)
+    fetch(`${this.backend_ip}/changeModel`, requestOptions)
     .then(res=>res.json())
     .then(result =>{
       console.log("Returned post with status "+ result.status);
