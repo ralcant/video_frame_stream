@@ -16,14 +16,19 @@ class App extends React.Component{
   changeModel = () =>{
     let requestOptions = {
       method: 'GET',
-      redirect: 'follow'
+      mode: "cors",
+      redirect: 'follow',
+      headers:{
+        "Access-Control-Allow-Origin": "*"
+      }
     };
     console.log("Trying to change model...")
     fetch(`${this.backend_ip}/changeModel`, requestOptions)
     .then(res=>res.json())
     .then(result =>{
-      console.log("Returned post with status "+ result.status);
-      console.log("Message: "+ result.message);
+      console.log(result);
+      // console.log("Returned post with status "+ result.status);
+      // console.log("Message: "+ result.message);
     })
     return
   }
