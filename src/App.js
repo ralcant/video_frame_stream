@@ -9,9 +9,34 @@ class App extends React.Component{
       num : 0,
       image_source: "",
       color: true,
+      testServerResponse: "",
     }
     // this.pushFrames = this.pushFrames.bind(this);
-    this.backend_ip = "https://18.27.79.47:5000";
+    this.backend_ip = "http://18.27.79.47:5000";
+  }
+  testServerCall = ()=>{
+    let requestOptions = {
+      method: 'GET',
+      mode: "cors",
+      redirect: 'follow',
+      headers:{
+        "Access-Control-Allow-Origin": "*"
+      }
+    };
+    let that = this;
+    fetch(`${this.backend_ip}/test`, requestOptions)
+    .then(res=>res.json())
+    .then(result =>{
+      console.log(result);
+      that.setState({
+        testServerResponse: result.toString(),
+      })
+    })
+    .catch(err =>{
+      that.setState({
+        testServerResponse: err.message,
+      })
+    })
   }
   changeModel = () =>{
     let requestOptions = {
@@ -102,6 +127,7 @@ class App extends React.Component{
     return (
       <div className="App">
         <header className="App-header">
+
           {/* <button onClick={()=>this.pushFrames("videos/test_daily.mp4")}>
             Push frames
           </button> */}
@@ -120,8 +146,13 @@ class App extends React.Component{
             height={500}
             />
           }
-
-          {this.state.num}
+            <button onClick={this.testServerCall}>
+              Test the server call!
+            </button>
+            {
+            this.state.testServerResponse !== "" && 
+            <span>Response: {this.state.testServerResponse}</span>
+            }
 
         </header>
       </div>
