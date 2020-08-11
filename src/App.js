@@ -1,6 +1,10 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+const https = require("https");
+const agent = new https.Agent({
+  rejectUnauthorized: false
+});
 
 class App extends React.Component{
   constructor(props){
@@ -21,7 +25,8 @@ class App extends React.Component{
       redirect: 'follow',
       headers:{
         "Access-Control-Allow-Origin": "*"
-      }
+      },
+      agent: agent,
     };
     let that = this;
     fetch(`${this.backend_ip}/test`, requestOptions)
