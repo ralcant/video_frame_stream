@@ -26,10 +26,10 @@ class App extends React.Component{
       headers:{
         "Access-Control-Allow-Origin": "*"
       },
-      agent: agent,
+      // agent: agent,
     };
     let that = this;
-    fetch(`${this.backend_ip}/test`, requestOptions)
+    fetch(`https://www.art-news.club/test`, requestOptions)
     .then(res=>res.json())
     .then(result =>{
       console.log(result);
