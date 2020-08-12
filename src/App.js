@@ -29,6 +29,7 @@ class App extends React.Component{
       // agent: agent,
     };
     let that = this;
+    console.log("Fetching from https://www.art-news.club/ ");
     fetch(`https://www.art-news.club/`, requestOptions)
     .then(res=>res.json())
     .then(result =>{
