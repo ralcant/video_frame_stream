@@ -29,12 +29,12 @@ class App extends React.Component{
       // agent: agent,
     };
     let that = this;
-    fetch(`https://www.art-news.club/test`, requestOptions)
+    fetch(`https://www.art-news.club/`, requestOptions)
     .then(res=>res.json())
     .then(result =>{
       console.log(result);
       that.setState({
-        testServerResponse: result.toString(),
+        testServerResponse: result.response,
       })
     })
     .catch(err =>{
