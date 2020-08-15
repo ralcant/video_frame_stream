@@ -70,6 +70,7 @@ class App extends React.Component{
           height="auto"
       /> */}
           <ReactHLS autoplay={true} fluid={true} url={`https://www.art-news.club/stream/writer-${this.state.n}.m3u8`}/>
+          <ReactHLS autoplay={true} fluid={true} url={`https://www.art-news.club/stream/test_daily.m3u8`}/>
 
           {/* <button  onClick={()=>this.showVideo()}>
             Get a frame!
