@@ -1,8 +1,8 @@
 import React from 'react';
 // import logo from './logo.svg';
-// import ReactHLS from 'react-hls';
+import ReactHLS from 'react-hls';
 // import ReactHlsPlayer from 'react-hls-player'
-import Player from "./Player"
+// import Player from "./Player"
 
 import './App.css';
 import styled_frames from './styled_frames.json';
@@ -16,8 +16,16 @@ class App extends React.Component{
       image_source: "",
       color: true,
       testServerResponse: "",
+      n: 0,
     }
 
+  }
+  componentDidMount(){
+    this.timer = setInterval(()=>{
+      this.setState({
+        n : (this.state.n + 1 ) %5
+      })
+    }, 1000)
   }
   showVideo = ()=>{
 
@@ -36,12 +44,13 @@ class App extends React.Component{
     return (
       <div className="App">
         <header className="App-header">
-          <Player 
+          {/* <Player 
+          ref = {player => this.player = player}
           width = "600"
           height = "400"
           // source = "https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8"
           source = "https://www.art-news.club/stream/test_daily.m3u8"
-          />
+          /> */}
         {/* <ReactHlsPlayer
           url='https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'
           // url='https://art-news.club/static/test_daily.m3u8'
@@ -60,7 +69,7 @@ class App extends React.Component{
           width="100%"
           height="auto"
       /> */}
-          {/* <ReactHLS url="https://www.art-news.club/static/test_daily.m3u8"/> */}
+          <ReactHLS autoplay={true} fluid={true} url={`https://www.art-news.club/stream/writer-${this.state.n}.m3u8`}/>
 
           {/* <button  onClick={()=>this.showVideo()}>
             Get a frame!
