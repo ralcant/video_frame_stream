@@ -8,6 +8,8 @@
     "@testing-library/user-event": "^7.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hls": "0.0.8",
+    "react-hls-player": "^1.1.0",
     "react-scripts": "3.4.1"
   },
   "scripts": {

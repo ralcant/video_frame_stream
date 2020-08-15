@@ -1,10 +1,11 @@
 import React from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
+import ReactHLS from 'react-hls';
+import ReactHlsPlayer from 'react-hls-player'
+
 import './App.css';
-const https = require("https");
-const agent = new https.Agent({
-  rejectUnauthorized: false
-});
+import styled_frames from './styled_frames.json';
+import get_styled_path from "./utils";
 
 class App extends React.Component{
   constructor(props){
@@ -15,151 +16,40 @@ class App extends React.Component{
       color: true,
       testServerResponse: "",
     }
-    // this.pushFrames = this.pushFrames.bind(this);
-    this.backend_ip = "https://18.27.79.47:5000";
-  }
-  testServerCall = ()=>{
-    let requestOptions = {
-      method: 'GET',
-      mode: "cors",
-      redirect: 'follow',
-      headers:{
-        "Access-Control-Allow-Origin": "*"
-      },
-      // agent: agent,
-    };
-    let that = this;
-    console.log("Fetching from https://www.art-news.club/ ");
-    fetch(`https://www.art-news.club/`, requestOptions)
-    .then(res=>res.json())
-    .then(result =>{
-      console.log(result);
-      that.setState({
-        testServerResponse: result.response,
-      })
-    })
-    .catch(err =>{
-      that.setState({
-        testServerResponse: err.message,
-      })
-    })
-  }
-  changeModel = () =>{
-    let requestOptions = {
-      method: 'GET',
-      mode: "cors",
-      redirect: 'follow',
-      headers:{
-        "Access-Control-Allow-Origin": "*"
-      }
-    };
-    console.log("Trying to change model...")
-    fetch(`${this.backend_ip}/changeModel`, requestOptions)
-    .then(res=>res.json())
-    .then(result =>{
-      console.log(result);
-      // console.log("Returned post with status "+ result.status);
-      // console.log("Message: "+ result.message);
-    })
-    return
-  }
-  changeColor = ()=>{
-    fetch('/changeColor')
-    .then(res=>res.json())
-    .then(result =>{
-      console.log("Returned post with status "+ result.status);
-      console.log("Message: "+ result.message);
-    })
-    this.setState({
-      color: !this.state.color,
-    })
-    return
-  }
-  getImage2 = ()=>{
-    let that = this;
-    console.log("getting image...")
-    fetch(`${this.backend_ip}/image`)//, params)
-    .then(res => res.body)
-    .then(body => body.getReader())
-    .then(async function(reader){ 
-      let runs = 0;
-      let full = "";
-      let took = 0;
-      while (true){
-        // console.log(reader.read())
-        const {done, value} = await reader.read(); //value is Uint8Array
-        if (done){
-          console.log("it's done!")
-          break;
-        }
-        let ImageDataArrayBuffer = value //new Uint8Array(value); //from https://medium.com/@koteswar.meesala/convert-array-buffer-to-base64-string-to-display-images-in-angular-7-4c443db242cd
-                                                          // unclear why I don't need to do Step #3 from ^^^
-        const STRING_CHAR = ImageDataArrayBuffer.reduce((data, byte)=> {
-          return data + String.fromCharCode(byte);
-          }, ''); //binary string
-        full += STRING_CHAR;
-        took +=1
-        if (STRING_CHAR.endsWith("#")){
-          // that.setFrame("data:image/png;base64,"+full.slice(0, full.length-1));
-          runs+=1
-          console.log("frame #"+runs+ ", took "+took+" frames")
-          took = 0;
-          that.setState({
-            image_source: full.slice(0, full.length-1),
-          })
-          full = ""
-        }
-      } 
-      // that.setFrame("data:image/png;base64,"+full)
 
-    })
   }
-  isBase64 =(str) =>{
-    var base64regex = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
-    return base64regex.test(str);
-    if (str ==='' || str.trim() ===''){ return false; }
-    try {
-        return btoa(atob(str)) ===  str;
-    } catch (err) {
-        return false;
-    }
+  showVideo = ()=>{
+
   }
-  setFrame = (frame)=>{
-    this.setState({
-      image_source: frame,
-    })
-  }
+  
   render(){
+    console.log("rendered again...")
     return (
       <div className="App">
         <header className="App-header">
+        <ReactHlsPlayer
+          url='https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'
+          // url='https://art-news.club/static/test_daily.m3u8'
 
-          {/* <button onClick={()=>this.pushFrames("videos/test_daily.mp4")}>
-            Push frames
-          </button> */}
-          <button onClick={this.changeModel}>
-            Change Model
-          </button>
-          <button onClick={()=>this.getImage2()}>
-            Wanna see yourself?
-          </button>
-          {
-            this.state.image_source.length > 0 &&
-            <img 
-            src ={`${this.state.image_source}`}
-            alt="this is me"
-            with={500}
-            height={500}
-            />
-          }
-            <button onClick={this.testServerCall}>
-              Test the server call!
-            </button>
-            {
-            this.state.testServerResponse !== "" && 
-            <span>Response: {this.state.testServerResponse}</span>
-            }
+          autoplay={false}
+          controls={true}
+          width="100%"
+          height="auto"
+      />
+          <ReactHlsPlayer
+          // url='https://bitdash-a.akamaihd.net/content/sintel/hls/playlist.m3u8'
+          url='https://www.art-news.club/static/test_daily.m3u8'
 
+          autoplay={false}
+          controls={true}
+          width="100%"
+          height="auto"
+      />
+          {/* <ReactHLS url="https://www.art-news.club/static/test_daily.m3u8"/> */}
+
+          <button  onClick={()=>this.showVideo()}>
+            Get a frame!
+          </button>
         </header>
       </div>
     );
