@@ -15,22 +15,70 @@ class App extends React.Component{
       num : 0,
       image_source: "",
       color: true,
-      testServerResponse: "",
+      serverResponse: "",
       n: 0,
     }
 
-  }
-  componentDidMount(){
-    this.timer = setInterval(()=>{
-      this.setState({
-        n : (this.state.n + 1 ) %5
-      })
-    }, 1000)
-  }
-  showVideo = ()=>{
+    this.backend_ip = "https://www.art-news.club/";
 
   }
-  
+  // componentDidMount(){
+  //   this.timer = setInterval(()=>{
+  //     this.setState({
+  //       n : (this.state.n + 1 ) %5
+  //     })
+  //   }, 1000)
+  // }
+  start_video = ()=>{
+    let requestOptions = {
+      method: 'GET',
+      mode: "cors",
+      redirect: 'follow',
+      headers:{
+        "Access-Control-Allow-Origin": "*"
+      },
+    };
+    let that = this;
+    console.log(`Fetching from ${this.backend_ip}/start_video `);
+    fetch(`${this.backend_ip}/start_video`, requestOptions)
+    .then(res=>res.json())
+    .then(result =>{
+      // console.log(result);
+      that.setState({
+        serverResponse: result.message,
+      })
+    })
+    .catch(err =>{
+      that.setState({
+        serverResponse: err.message,
+      })
+    })
+  }
+  bw = ()=>{
+    let requestOptions = {
+      method: 'GET',
+      mode: "cors",
+      redirect: 'follow',
+      headers:{
+        "Access-Control-Allow-Origin": "*"
+      },
+    };
+    let that = this;
+    console.log(`Fetching from ${this.backend_ip}/bw `);
+    fetch(`${this.backend_ip}/bw`, requestOptions)
+    .then(res=>res.json())
+    .then(result =>{
+      console.log(result);
+      // that.setState({
+      //   serverResponse: result.message,
+      // })
+    })
+    .catch(err =>{
+      // that.setState({
+      //   serverResponse: err.message,
+      // })
+    })
+  }
   render(){
     console.log("rendered again...")
     const videoJsOptions = {
@@ -44,6 +92,9 @@ class App extends React.Component{
     return (
       <div className="App">
         <header className="App-header">
+          <button  onClick={()=>this.start_video()}>
+            Start video
+          </button>
           {/* <Player 
           ref = {player => this.player = player}
           width = "600"
@@ -69,12 +120,13 @@ class App extends React.Component{
           width="100%"
           height="auto"
       /> */}
-          <ReactHLS autoplay={true} fluid={true} url={`https://www.art-news.club/stream/writer-${this.state.n}.m3u8`}/>
+          <ReactHLS controls={false} autoplay={true} fluid={true} url={`https://www.art-news.club/stream/writer-0.m3u8`}/>
           {/* <ReactHLS autoplay={true} fluid={true} url={`https://www.art-news.club/stream/test_daily.m3u8`}/> */}
 
-          {/* <button  onClick={()=>this.showVideo()}>
-            Get a frame!
-          </button> */}
+          <button  onClick={()=>this.bw()}>
+            Show/Hide color!
+          </button>
+          <span>{this.state.serverResponse}</span>
         </header>
       </div>
     );
